@@ -1,0 +1,25 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: KoiosNFT
+    network: rinkeby
+    source:
+      address: "0x84AB844DffF92696f53eE3a9F4d05d5c0926a2Cc"
+      abi: KoiosNFT
+      startBlock: 7039782
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: KoiosNFT
+          file: ./abis/KoiosNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
