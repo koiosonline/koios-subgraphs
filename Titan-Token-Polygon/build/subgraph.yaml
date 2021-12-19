@@ -1,0 +1,23 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Titan
+    network: matic
+    source:
+      address: "0xb49750ad82d11c12209a837210ab753ab09115a7"
+      abi: Titan
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+      abis:
+        - name: Titan
+          file: Titan\abis\Titan.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: Titan\Titan.wasm
