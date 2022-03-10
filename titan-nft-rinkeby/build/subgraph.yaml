@@ -1,0 +1,25 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: TitanNFT
+    network: rinkeby
+    source:
+      address: "0xf6034485e8B0603d9545D7AFD980e50F29CfA414"
+      abi: TitanNFT
+      startBlock: 10247125
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - User
+      abis:
+        - name: TitanNFT
+          file: TitanNFT/abis/TitanNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: TitanNFT/TitanNFT.wasm

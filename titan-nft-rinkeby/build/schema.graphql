@@ -1,0 +1,6 @@
+type NFT @entity {
+  id: ID!
+  contentURI: String!
+  to: String!
+  from: String!
+}
