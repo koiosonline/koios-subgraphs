@@ -3,4 +3,5 @@ type NFT @entity {
   contentURI: String!
   to: String!
   from: String!
+  owner: String!
 }
