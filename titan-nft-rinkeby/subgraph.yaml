@@ -6,9 +6,9 @@ dataSources:
     name: TitanNFT
     network: rinkeby
     source:
-      address: "0xf6034485e8B0603d9545D7AFD980e50F29CfA414"
+      address: "0xc5d26Ed816da61e5d633BcEa3Fc0055BD81A96A7"
       abi: TitanNFT
-      startBlock: 10247125
+      startBlock: 9471915
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -1,4 +1,4 @@
-type NFT @entity {
+type Nft @entity {
   id: ID!
   contentURI: String!
   to: String!
