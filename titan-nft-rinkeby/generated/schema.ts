@@ -19,6 +19,7 @@ export class Nft extends Entity {
     this.set("contentURI", Value.fromString(""));
     this.set("to", Value.fromString(""));
     this.set("from", Value.fromString(""));
+    this.set("owner", Value.fromString(""));
   }
 
   save(): void {
@@ -72,5 +73,14 @@ export class Nft extends Entity {
 
   set from(value: string) {
     this.set("from", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    return value!.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
   }
 }
