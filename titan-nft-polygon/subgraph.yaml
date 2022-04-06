@@ -1,0 +1,25 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: TitanNFT
+    network: polygon
+    source:
+      address: "0xe5562A291268A8B08dE45BA183Ec8f1E1A3150d3"
+      abi: TitanNFT
+      startBlock: 26584473
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - User
+      abis:
+        - name: TitanNFT
+          file: ./abis/TitanNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
