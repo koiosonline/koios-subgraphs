@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: TitanNFT
-    network: polygon
+    network: matic
     source:
       address: "0xe5562A291268A8B08dE45BA183Ec8f1E1A3150d3"
       abi: TitanNFT
