@@ -11,6 +11,7 @@ export function handleTransfer(event: TransferEvent): void {
   nft.to = event.params.to.toHex();
   nft.from = event.params.from.toHex();
   nft.owner = event.params.to.toHex();
+  nft.tokenID = event.params.tokenId;
   
   const tokenContract = NFTContract.bind(event.address);
   nft.contentURI = tokenContract.tokenURI(event.params.tokenId);
