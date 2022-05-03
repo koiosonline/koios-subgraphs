@@ -150,44 +150,42 @@ export class tokenMinted__Params {
   }
 }
 
-export class TitanNFT__getAllTokensResultValue0Struct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get uri(): string {
-    return this[1].toString();
-  }
-}
-
 export class TitanNFT extends ethereum.SmartContract {
   static bind(address: Address): TitanNFT {
     return new TitanNFT("TitanNFT", address);
   }
 
-  _token(): Address {
-    let result = super.call("_token", "_token():(address)", []);
+  _merkleRoot(): Bytes {
+    let result = super.call("_merkleRoot", "_merkleRoot():(bytes32)", []);
 
-    return result[0].toAddress();
+    return result[0].toBytes();
   }
 
-  try__token(): ethereum.CallResult<Address> {
-    let result = super.tryCall("_token", "_token():(address)", []);
+  try__merkleRoot(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("_merkleRoot", "_merkleRoot():(bytes32)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  _tokenLimit(): BigInt {
-    let result = super.call("_tokenLimit", "_tokenLimit():(uint256)", []);
+  _tokenIdsMinted(param0: BigInt): BigInt {
+    let result = super.call(
+      "_tokenIdsMinted",
+      "_tokenIdsMinted(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
 
     return result[0].toBigInt();
   }
 
-  try__tokenLimit(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("_tokenLimit", "_tokenLimit():(uint256)", []);
+  try__tokenIdsMinted(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "_tokenIdsMinted",
+      "_tokenIdsMinted(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -233,6 +231,29 @@ export class TitanNFT extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  _treasuryAmount(): BigInt {
+    let result = super.call(
+      "_treasuryAmount",
+      "_treasuryAmount():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try__treasuryAmount(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "_treasuryAmount",
+      "_treasuryAmount():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   balanceOf(owner: Address): BigInt {
     let result = super.call("balanceOf", "balanceOf(address):(uint256)", [
       ethereum.Value.fromAddress(owner)
@@ -250,56 +271,6 @@ export class TitanNFT extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  balanceOfContract(): BigInt {
-    let result = super.call(
-      "balanceOfContract",
-      "balanceOfContract():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_balanceOfContract(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "balanceOfContract",
-      "balanceOfContract():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getAllTokens(): Array<TitanNFT__getAllTokensResultValue0Struct> {
-    let result = super.call(
-      "getAllTokens",
-      "getAllTokens():((uint256,string)[])",
-      []
-    );
-
-    return result[0].toTupleArray<TitanNFT__getAllTokensResultValue0Struct>();
-  }
-
-  try_getAllTokens(): ethereum.CallResult<
-    Array<TitanNFT__getAllTokensResultValue0Struct>
-  > {
-    let result = super.tryCall(
-      "getAllTokens",
-      "getAllTokens():((uint256,string)[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<TitanNFT__getAllTokensResultValue0Struct>()
-    );
   }
 
   getApproved(tokenId: BigInt): Address {
@@ -552,29 +523,6 @@ export class TitanNFT extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
-
-  walletOfOwner(_owner: Address): Array<BigInt> {
-    let result = super.call(
-      "walletOfOwner",
-      "walletOfOwner(address):(uint256[])",
-      [ethereum.Value.fromAddress(_owner)]
-    );
-
-    return result[0].toBigIntArray();
-  }
-
-  try_walletOfOwner(_owner: Address): ethereum.CallResult<Array<BigInt>> {
-    let result = super.tryCall(
-      "walletOfOwner",
-      "walletOfOwner(address):(uint256[])",
-      [ethereum.Value.fromAddress(_owner)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
-  }
 }
 
 export class ConstructorCall extends ethereum.Call {
@@ -593,118 +541,12 @@ export class ConstructorCall__Inputs {
   constructor(call: ConstructorCall) {
     this._call = call;
   }
-
-  get _name(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get _symbol(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get token(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get maxAmount(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
 }
 
 export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class _setContractTokenCall extends ethereum.Call {
-  get inputs(): _setContractTokenCall__Inputs {
-    return new _setContractTokenCall__Inputs(this);
-  }
-
-  get outputs(): _setContractTokenCall__Outputs {
-    return new _setContractTokenCall__Outputs(this);
-  }
-}
-
-export class _setContractTokenCall__Inputs {
-  _call: _setContractTokenCall;
-
-  constructor(call: _setContractTokenCall) {
-    this._call = call;
-  }
-
-  get _newTokenAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class _setContractTokenCall__Outputs {
-  _call: _setContractTokenCall;
-
-  constructor(call: _setContractTokenCall) {
-    this._call = call;
-  }
-}
-
-export class _setSupplyCall extends ethereum.Call {
-  get inputs(): _setSupplyCall__Inputs {
-    return new _setSupplyCall__Inputs(this);
-  }
-
-  get outputs(): _setSupplyCall__Outputs {
-    return new _setSupplyCall__Outputs(this);
-  }
-}
-
-export class _setSupplyCall__Inputs {
-  _call: _setSupplyCall;
-
-  constructor(call: _setSupplyCall) {
-    this._call = call;
-  }
-
-  get _newSupply(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class _setSupplyCall__Outputs {
-  _call: _setSupplyCall;
-
-  constructor(call: _setSupplyCall) {
-    this._call = call;
-  }
-}
-
-export class _setTokenlimitCall extends ethereum.Call {
-  get inputs(): _setTokenlimitCall__Inputs {
-    return new _setTokenlimitCall__Inputs(this);
-  }
-
-  get outputs(): _setTokenlimitCall__Outputs {
-    return new _setTokenlimitCall__Outputs(this);
-  }
-}
-
-export class _setTokenlimitCall__Inputs {
-  _call: _setTokenlimitCall;
-
-  constructor(call: _setTokenlimitCall) {
-    this._call = call;
-  }
-
-  get _newLimit(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class _setTokenlimitCall__Outputs {
-  _call: _setTokenlimitCall;
-
-  constructor(call: _setTokenlimitCall) {
     this._call = call;
   }
 }
@@ -743,28 +585,36 @@ export class ApproveCall__Outputs {
   }
 }
 
-export class MintCall extends ethereum.Call {
-  get inputs(): MintCall__Inputs {
-    return new MintCall__Inputs(this);
+export class ClaimCall extends ethereum.Call {
+  get inputs(): ClaimCall__Inputs {
+    return new ClaimCall__Inputs(this);
   }
 
-  get outputs(): MintCall__Outputs {
-    return new MintCall__Outputs(this);
+  get outputs(): ClaimCall__Outputs {
+    return new ClaimCall__Outputs(this);
   }
 }
 
-export class MintCall__Inputs {
-  _call: MintCall;
+export class ClaimCall__Inputs {
+  _call: ClaimCall;
 
-  constructor(call: MintCall) {
+  constructor(call: ClaimCall) {
     this._call = call;
   }
+
+  get _merkleProof(): Array<Bytes> {
+    return this._call.inputValues[0].value.toBytesArray();
+  }
+
+  get tokenID(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
 }
 
-export class MintCall__Outputs {
-  _call: MintCall;
+export class ClaimCall__Outputs {
+  _call: ClaimCall;
 
-  constructor(call: MintCall) {
+  constructor(call: ClaimCall) {
     this._call = call;
   }
 }
@@ -939,6 +789,36 @@ export class SetBaseURICall__Outputs {
   }
 }
 
+export class SetMerkleRootCall extends ethereum.Call {
+  get inputs(): SetMerkleRootCall__Inputs {
+    return new SetMerkleRootCall__Inputs(this);
+  }
+
+  get outputs(): SetMerkleRootCall__Outputs {
+    return new SetMerkleRootCall__Outputs(this);
+  }
+}
+
+export class SetMerkleRootCall__Inputs {
+  _call: SetMerkleRootCall;
+
+  constructor(call: SetMerkleRootCall) {
+    this._call = call;
+  }
+
+  get merkleRoot(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+}
+
+export class SetMerkleRootCall__Outputs {
+  _call: SetMerkleRootCall;
+
+  constructor(call: SetMerkleRootCall) {
+    this._call = call;
+  }
+}
+
 export class ToggleRevealedCall extends ethereum.Call {
   get inputs(): ToggleRevealedCall__Inputs {
     return new ToggleRevealedCall__Inputs(this);
@@ -1033,28 +913,32 @@ export class TransferOwnershipCall__Outputs {
   }
 }
 
-export class WithdrawAllCall extends ethereum.Call {
-  get inputs(): WithdrawAllCall__Inputs {
-    return new WithdrawAllCall__Inputs(this);
+export class TreasuryMintCall extends ethereum.Call {
+  get inputs(): TreasuryMintCall__Inputs {
+    return new TreasuryMintCall__Inputs(this);
   }
 
-  get outputs(): WithdrawAllCall__Outputs {
-    return new WithdrawAllCall__Outputs(this);
+  get outputs(): TreasuryMintCall__Outputs {
+    return new TreasuryMintCall__Outputs(this);
   }
 }
 
-export class WithdrawAllCall__Inputs {
-  _call: WithdrawAllCall;
+export class TreasuryMintCall__Inputs {
+  _call: TreasuryMintCall;
 
-  constructor(call: WithdrawAllCall) {
+  constructor(call: TreasuryMintCall) {
     this._call = call;
   }
+
+  get quantity(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
 }
 
-export class WithdrawAllCall__Outputs {
-  _call: WithdrawAllCall;
+export class TreasuryMintCall__Outputs {
+  _call: TreasuryMintCall;
 
-  constructor(call: WithdrawAllCall) {
+  constructor(call: TreasuryMintCall) {
     this._call = call;
   }
 }

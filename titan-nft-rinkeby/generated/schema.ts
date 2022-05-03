@@ -84,3 +84,57 @@ export class Nft extends Entity {
     this.set("owner", Value.fromString(value));
   }
 }
+
+export class ContractInfo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
+    this.set("totalMinted", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ContractInfo entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save ContractInfo entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("ContractInfo", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ContractInfo | null {
+    return changetype<ContractInfo | null>(store.get("ContractInfo", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value!.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
+  get totalMinted(): BigInt {
+    let value = this.get("totalMinted");
+    return value!.toBigInt();
+  }
+
+  set totalMinted(value: BigInt) {
+    this.set("totalMinted", Value.fromBigInt(value));
+  }
+}

@@ -1,7 +1,13 @@
 type Nft @entity {
-  id: ID!
-  contentURI: String!
-  to: String!
-  from: String!
-  owner: String!
+    id: ID!
+    contentURI: String!
+    to: String!
+    from: String!
+    owner: String!
+}
+
+type ContractInfo @entity {
+    id: ID!
+    totalSupply: BigInt!
+    totalMinted: BigInt!
 }

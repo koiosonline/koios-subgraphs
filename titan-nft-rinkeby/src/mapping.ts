@@ -1,7 +1,9 @@
 import { Transfer as TransferEvent, TitanNFT as NFTContract } from "../generated/TitanNFT/TitanNFT";
-import { Nft } from "../generated/schema";
+import { Nft, ContractInfo } from "../generated/schema";
 
 export function handleTransfer(event: TransferEvent): void {
+
+    // NFT Owner
   let nft = Nft.load(event.transaction.hash.toHex());
 
   if(!nft) {
@@ -16,4 +18,16 @@ export function handleTransfer(event: TransferEvent): void {
   nft.contentURI = tokenContract.tokenURI(event.params.tokenId);
 
   nft.save();
+
+  // ContractInfo 
+  let contractInfo = ContractInfo.load(event.transaction.hash.toHex());
+  if(!contractInfo) {
+    contractInfo = new ContractInfo(event.transaction.hash.toHex());
+  }
+
+  contractInfo.totalSupply = tokenContract._totalSupply();
+  contractInfo.totalMinted = tokenContract.totalSupply();
+
+  contractInfo.save();
+
 }

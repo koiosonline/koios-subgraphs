@@ -6,16 +6,16 @@ dataSources:
     name: TitanNFT
     network: rinkeby
     source:
-      address: "0xf6034485e8B0603d9545D7AFD980e50F29CfA414"
+      address: "0x4BBfcBabdAb4a1d411e01c429542780d0B4A41Dd"
       abi: TitanNFT
-      startBlock: 10247125
+      startBlock: 10571245
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - NFT
-        - User
+        - ContractInfo
       abis:
         - name: TitanNFT
           file: TitanNFT/abis/TitanNFT.json
