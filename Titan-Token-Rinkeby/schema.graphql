@@ -1,0 +1,9 @@
+type User @entity {
+  id: ID!
+  address: String!
+  balance: BigInt!
+  erc20Symbol: String!
+  contentURI: String!
+  transferedMint: BigInt!
+}
+
