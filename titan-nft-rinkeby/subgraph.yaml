@@ -6,7 +6,7 @@ dataSources:
     name: TitanNFT
     network: rinkeby
     source:
-      address: "0x4BBfcBabdAb4a1d411e01c429542780d0B4A41Dd"
+      address: "0x762e5600ddeB2e60fD247D4D66613C8aFaf6968a"
       abi: TitanNFT
       startBlock: 10571245
     mapping:

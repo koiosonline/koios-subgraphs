@@ -16,6 +16,7 @@ export class Nft extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
+    this.set("tokenID", Value.fromBigInt(BigInt.zero()));
     this.set("contentURI", Value.fromString(""));
     this.set("to", Value.fromString(""));
     this.set("from", Value.fromString(""));
@@ -46,6 +47,15 @@ export class Nft extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get tokenID(): BigInt {
+    let value = this.get("tokenID");
+    return value!.toBigInt();
+  }
+
+  set tokenID(value: BigInt) {
+    this.set("tokenID", Value.fromBigInt(value));
   }
 
   get contentURI(): string {

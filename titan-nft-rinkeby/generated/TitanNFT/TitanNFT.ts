@@ -62,24 +62,6 @@ export class ApprovalForAll__Params {
   }
 }
 
-export class IsRevealedChanged extends ethereum.Event {
-  get params(): IsRevealedChanged__Params {
-    return new IsRevealedChanged__Params(this);
-  }
-}
-
-export class IsRevealedChanged__Params {
-  _event: IsRevealedChanged;
-
-  constructor(event: IsRevealedChanged) {
-    this._event = event;
-  }
-
-  get account(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-}
-
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -99,6 +81,24 @@ export class OwnershipTransferred__Params {
 
   get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class SignerUpdated extends ethereum.Event {
+  get params(): SignerUpdated__Params {
+    return new SignerUpdated__Params(this);
+  }
+}
+
+export class SignerUpdated__Params {
+  _event: SignerUpdated;
+
+  constructor(event: SignerUpdated) {
+    this._event = event;
+  }
+
+  get newSigner(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 }
 
@@ -155,98 +155,52 @@ export class TitanNFT extends ethereum.SmartContract {
     return new TitanNFT("TitanNFT", address);
   }
 
-  _merkleRoot(): Bytes {
-    let result = super.call("_merkleRoot", "_merkleRoot():(bytes32)", []);
+  _NFTBaseURI(): string {
+    let result = super.call("_NFTBaseURI", "_NFTBaseURI():(string)", []);
 
-    return result[0].toBytes();
+    return result[0].toString();
   }
 
-  try__merkleRoot(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("_merkleRoot", "_merkleRoot():(bytes32)", []);
+  try__NFTBaseURI(): ethereum.CallResult<string> {
+    let result = super.tryCall("_NFTBaseURI", "_NFTBaseURI():(string)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toString());
   }
 
-  _tokenIdsMinted(param0: BigInt): BigInt {
+  _isTokenMinted(tokenId: BigInt): boolean {
     let result = super.call(
-      "_tokenIdsMinted",
-      "_tokenIdsMinted(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "_isTokenMinted",
+      "_isTokenMinted(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
 
-    return result[0].toBigInt();
+    return result[0].toBoolean();
   }
 
-  try__tokenIdsMinted(param0: BigInt): ethereum.CallResult<BigInt> {
+  try__isTokenMinted(tokenId: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "_tokenIdsMinted",
-      "_tokenIdsMinted(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "_isTokenMinted",
+      "_isTokenMinted(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  _tokensMinted(param0: Address): BigInt {
-    let result = super.call(
-      "_tokensMinted",
-      "_tokensMinted(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
+  _maxSupply(): BigInt {
+    let result = super.call("_maxSupply", "_maxSupply():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try__tokensMinted(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "_tokensMinted",
-      "_tokensMinted(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  _totalSupply(): BigInt {
-    let result = super.call("_totalSupply", "_totalSupply():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try__totalSupply(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("_totalSupply", "_totalSupply():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  _treasuryAmount(): BigInt {
-    let result = super.call(
-      "_treasuryAmount",
-      "_treasuryAmount():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try__treasuryAmount(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "_treasuryAmount",
-      "_treasuryAmount():(uint256)",
-      []
-    );
+  try__maxSupply(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_maxSupply", "_maxSupply():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -294,21 +248,6 @@ export class TitanNFT extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getBaseURI(): string {
-    let result = super.call("getBaseURI", "getBaseURI():(string)", []);
-
-    return result[0].toString();
-  }
-
-  try_getBaseURI(): ethereum.CallResult<string> {
-    let result = super.tryCall("getBaseURI", "getBaseURI():(string)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
   isApprovedForAll(owner: Address, operator: Address): boolean {
     let result = super.call(
       "isApprovedForAll",
@@ -328,21 +267,6 @@ export class TitanNFT extends ethereum.SmartContract {
       "isApprovedForAll(address,address):(bool)",
       [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  is_revealed(): boolean {
-    let result = super.call("is_revealed", "is_revealed():(bool)", []);
-
-    return result[0].toBoolean();
-  }
-
-  try_is_revealed(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("is_revealed", "is_revealed():(bool)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -523,6 +447,49 @@ export class TitanNFT extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
+
+  verifyTokenForAddress(
+    _salt: string,
+    _token: Bytes,
+    _tokenId: BigInt,
+    _address: Address
+  ): boolean {
+    let result = super.call(
+      "verifyTokenForAddress",
+      "verifyTokenForAddress(string,bytes,uint256,address):(bool)",
+      [
+        ethereum.Value.fromString(_salt),
+        ethereum.Value.fromBytes(_token),
+        ethereum.Value.fromUnsignedBigInt(_tokenId),
+        ethereum.Value.fromAddress(_address)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_verifyTokenForAddress(
+    _salt: string,
+    _token: Bytes,
+    _tokenId: BigInt,
+    _address: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "verifyTokenForAddress",
+      "verifyTokenForAddress(string,bytes,uint256,address):(bool)",
+      [
+        ethereum.Value.fromString(_salt),
+        ethereum.Value.fromBytes(_token),
+        ethereum.Value.fromUnsignedBigInt(_tokenId),
+        ethereum.Value.fromAddress(_address)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
 }
 
 export class ConstructorCall extends ethereum.Call {
@@ -602,12 +569,16 @@ export class ClaimCall__Inputs {
     this._call = call;
   }
 
-  get _merkleProof(): Array<Bytes> {
-    return this._call.inputValues[0].value.toBytesArray();
+  get _salt(): string {
+    return this._call.inputValues[0].value.toString();
   }
 
-  get tokenID(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+  get _token(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 
@@ -759,88 +730,32 @@ export class SetApprovalForAllCall__Outputs {
   }
 }
 
-export class SetBaseURICall extends ethereum.Call {
-  get inputs(): SetBaseURICall__Inputs {
-    return new SetBaseURICall__Inputs(this);
+export class SetSignerCall extends ethereum.Call {
+  get inputs(): SetSignerCall__Inputs {
+    return new SetSignerCall__Inputs(this);
   }
 
-  get outputs(): SetBaseURICall__Outputs {
-    return new SetBaseURICall__Outputs(this);
+  get outputs(): SetSignerCall__Outputs {
+    return new SetSignerCall__Outputs(this);
   }
 }
 
-export class SetBaseURICall__Inputs {
-  _call: SetBaseURICall;
+export class SetSignerCall__Inputs {
+  _call: SetSignerCall;
 
-  constructor(call: SetBaseURICall) {
+  constructor(call: SetSignerCall) {
     this._call = call;
   }
 
-  get baseURI(): string {
-    return this._call.inputValues[0].value.toString();
+  get _signer(): Address {
+    return this._call.inputValues[0].value.toAddress();
   }
 }
 
-export class SetBaseURICall__Outputs {
-  _call: SetBaseURICall;
+export class SetSignerCall__Outputs {
+  _call: SetSignerCall;
 
-  constructor(call: SetBaseURICall) {
-    this._call = call;
-  }
-}
-
-export class SetMerkleRootCall extends ethereum.Call {
-  get inputs(): SetMerkleRootCall__Inputs {
-    return new SetMerkleRootCall__Inputs(this);
-  }
-
-  get outputs(): SetMerkleRootCall__Outputs {
-    return new SetMerkleRootCall__Outputs(this);
-  }
-}
-
-export class SetMerkleRootCall__Inputs {
-  _call: SetMerkleRootCall;
-
-  constructor(call: SetMerkleRootCall) {
-    this._call = call;
-  }
-
-  get merkleRoot(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-}
-
-export class SetMerkleRootCall__Outputs {
-  _call: SetMerkleRootCall;
-
-  constructor(call: SetMerkleRootCall) {
-    this._call = call;
-  }
-}
-
-export class ToggleRevealedCall extends ethereum.Call {
-  get inputs(): ToggleRevealedCall__Inputs {
-    return new ToggleRevealedCall__Inputs(this);
-  }
-
-  get outputs(): ToggleRevealedCall__Outputs {
-    return new ToggleRevealedCall__Outputs(this);
-  }
-}
-
-export class ToggleRevealedCall__Inputs {
-  _call: ToggleRevealedCall;
-
-  constructor(call: ToggleRevealedCall) {
-    this._call = call;
-  }
-}
-
-export class ToggleRevealedCall__Outputs {
-  _call: ToggleRevealedCall;
-
-  constructor(call: ToggleRevealedCall) {
+  constructor(call: SetSignerCall) {
     this._call = call;
   }
 }
@@ -909,36 +824,6 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class TreasuryMintCall extends ethereum.Call {
-  get inputs(): TreasuryMintCall__Inputs {
-    return new TreasuryMintCall__Inputs(this);
-  }
-
-  get outputs(): TreasuryMintCall__Outputs {
-    return new TreasuryMintCall__Outputs(this);
-  }
-}
-
-export class TreasuryMintCall__Inputs {
-  _call: TreasuryMintCall;
-
-  constructor(call: TreasuryMintCall) {
-    this._call = call;
-  }
-
-  get quantity(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class TreasuryMintCall__Outputs {
-  _call: TreasuryMintCall;
-
-  constructor(call: TreasuryMintCall) {
     this._call = call;
   }
 }
