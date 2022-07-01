@@ -3,4 +3,5 @@ type User @entity {
   address: String!
   balance: BigInt!
   erc20Symbol: String!
+  transferedMint: BigInt!
 }

@@ -15,10 +15,6 @@ export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("address", Value.fromString(""));
-    this.set("balance", Value.fromBigInt(BigInt.zero()));
-    this.set("erc20Symbol", Value.fromString(""));
   }
 
   save(): void {
@@ -27,8 +23,7 @@ export class User extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save User entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type User must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("User", id.toString(), this);
     }
@@ -72,5 +67,14 @@ export class User extends Entity {
 
   set erc20Symbol(value: string) {
     this.set("erc20Symbol", Value.fromString(value));
+  }
+
+  get transferedMint(): BigInt {
+    let value = this.get("transferedMint");
+    return value!.toBigInt();
+  }
+
+  set transferedMint(value: BigInt) {
+    this.set("transferedMint", Value.fromBigInt(value));
   }
 }
